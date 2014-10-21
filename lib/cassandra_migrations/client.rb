@@ -35,7 +35,7 @@ module CassandraMigrations
 
   class Client
     def self.connect(options)
-      @cluster = Cassandra.connect(options)
+      @cluster = ::Cassandra.connect(options)
       self.new(@cluster)
     end
 
