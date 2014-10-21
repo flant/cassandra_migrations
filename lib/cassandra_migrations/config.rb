@@ -47,24 +47,12 @@ module CassandraMigrations
 
     def self.load_config
       begin
-        Kernel.send(:remove_const, 'CassandraSettings') if Kernel.const_defined?('CassandraSettings')
-        Kernel.const_set('CassandraSettings', RailsConfig.load_files(
-          Rails.root.join("config", "cassandra.yml").to_s,
-          Rails.root.join("config", "cassandra", "#{Rails.env}.yml").to_s,
-          Rails.root.join("config", "cassandra.local.yml").to_s,
-          Rails.root.join("config", "cassandra", "#{Rails.env}.local.yml").to_s,
-          *[["cassandra.yml"], ["cassandra", "#{Rails.env}.yml"],
-            ["cassandra.local.yml"], ["cassandra", "#{Rails.env}.local.yml"]].map {|p|
-            Pathname.new(ENV['CONFIGURATION_DIR']).join(*p).to_s if ENV['CONFIGURATION_DIR']
-          }.compact,
-        ))
-
-        if CassandraSettings.empty?
+        if defined?(CassandraSettings)
+          cassandra_settings_hash = CassandraSettings.to_hash.with_indifferent_access
+          {Rails.env => Configuration.new(*(FIELDS.map {|k| cassandra_settings_hash[k]}))}
+        else
           raise Errors::MissingConfigurationError, "No configuration for #{Rails.env} environment! Complete your config/cassandra.yml."
         end
-
-        cassandra_settings_hash = CassandraSettings.to_hash.with_indifferent_access
-        {Rails.env => Configuration.new(*(FIELDS.map {|k| cassandra_settings_hash[k]}))}
       rescue Errno::ENOENT
         raise Errors::MissingConfigurationError
       end
