@@ -31,7 +31,7 @@ end
 
 rails_root = ARGV.first
 
-# create cassandra.yaml
+# create cassandra.yml
 if File.exists?(File.expand_path('config/cassandra.yml', rails_root))
   puts "[skip] 'config/cassandra.yml' already exists".yellow
 else
@@ -39,6 +39,17 @@ else
   FileUtils.cp(
     File.expand_path('../template/cassandra.yml', File.dirname(__FILE__)),
     File.expand_path('config/cassandra.yml', rails_root)
+  )
+end
+
+# create cassandra.local.yml-sample
+if File.exists?(File.expand_path('config/cassandra.local.yml-sample', rails_root))
+  puts "[skip] 'config/cassandra.local.yml-sample' already exists".yellow
+else
+  puts "[new] creating 'config/cassandra.local.yml-sample'".green
+  FileUtils.cp(
+    File.expand_path('../template/cassandra.local.yml-sample', File.dirname(__FILE__)),
+    File.expand_path('config/cassandra.local.yml-sample', rails_root)
   )
 end
 
