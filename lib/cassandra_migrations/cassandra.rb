@@ -2,7 +2,7 @@
 
 require 'yaml'
 require 'cassandra'
-require_relative 'cql-rb-wrapper'
+require 'cassandra_migrations/client'
 require 'cassandra_migrations/cassandra/queries'
 require 'cassandra_migrations/cassandra/query_result'
 require 'cassandra_migrations/cassandra/keyspace_operations'
