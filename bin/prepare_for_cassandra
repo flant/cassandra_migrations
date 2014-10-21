@@ -53,6 +53,14 @@ else
   )
 end
 
+# create cassandra configuration subdirectory
+if File.exists?(File.expand_path('config/cassandra', rails_root))
+  puts "[skip] 'config/cassandra' already exists".yellow
+else
+  puts "[new] creating 'config/cassandra' directory".green
+  FileUtils.mkdir(File.expand_path('config/cassandra', rails_root))
+end
+
 # create db/cassandra_migrations
 if File.exists?(File.expand_path('db/cassandra_migrate', rails_root))
   puts "[skip] 'db/cassandra_migrate' already exists".yellow
